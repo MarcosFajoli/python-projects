@@ -1,18 +1,19 @@
 import random
 
 continuar: bool = True
+total_tentativas: int = 3
 
 while continuar:
     print("============================")
     print("Adivinhe o número de 0 a 10!")
     print("============================\n")
 
-    print("Você tem 3 chances para descobrir o número. Daremos dicas para facilitar.\nBoa sorte!\n")
+    print(f"Você tem {total_tentativas} chances para descobrir o número. Daremos dicas para facilitar.\nBoa sorte!\n")
 
     numero_aleatorio: int = random.randint(0, 10)
     acertou: bool = False
 
-    for i in range(1, 4):
+    for i in range(1, total_tentativas + 1):
         numero_escolhido_str: str = input("Digite um número: ")
 
         while not numero_escolhido_str.isnumeric():
