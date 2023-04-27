@@ -1,29 +1,43 @@
 import jogos
 
 
-def tabuleiro(marcacoes):
-    tabuleiro_str: str = "     |     |     \n" \
-                         f"  {marcacoes[0][0]}  |  {marcacoes[0][1]}  |  {marcacoes[0][2]}  \n" \
-                         "_____|_____|_____\n" \
-                         "     |     |     \n" \
-                         f"  {marcacoes[1][0]}  |  {marcacoes[1][1]}  |  {marcacoes[1][2]}  \n" \
-                         "_____|_____|_____\n" \
-                         "     |     |     \n" \
-                         f"  {marcacoes[2][0]}  |  {marcacoes[2][1]}  |  {marcacoes[2][2]}  \n" \
-                         "     |     |     \n"
+def tabuleiro(marcacoes):  # construcao do tabuleiro
+    tabuleiro_str: str = "\n     1     2     3  \n" \
+                         "        |     |     \n" \
+                         f"1    {marcacoes[0][0]}  |  {marcacoes[0][1]}  |  {marcacoes[0][2]}  \n" \
+                         "   _____|_____|_____\n" \
+                         "        |     |     \n" \
+                         f"2    {marcacoes[1][0]}  |  {marcacoes[1][1]}  |  {marcacoes[1][2]}  \n" \
+                         "   _____|_____|_____\n" \
+                         "        |     |     \n" \
+                         f"3    {marcacoes[2][0]}  |  {marcacoes[2][1]}  |  {marcacoes[2][2]}  \n" \
+                         "        |     |     \n"
 
     return tabuleiro_str
 
 
-def resetar_marcacoes():
+def resetar_marcacoes():  # mapeia o array de marcacoes como " "
     marcacoes = []
     for x in range(0, 3):
         linha = []
         for y in range(0, 3):
-            linha.append("X")
+            linha.append(" ")
         marcacoes.append(linha)
 
     return marcacoes
+
+
+def validar_jogada(entrada_list):
+    # variavel contendo as validações
+    is_valid: bool = len(entrada_list) == 1 or \
+                                len(entrada_list) > 2 or \
+                                (not (entrada_list[0].isnumeric() and entrada_list[1].isnumeric())) or \
+                                int(entrada_list[0]) < 1 or \
+                                int(entrada_list[0]) > 3 or \
+                                int(entrada_list[1]) < 1 or \
+                                int(entrada_list[1]) > 3
+
+    return is_valid
 
 
 def jogar():
@@ -43,24 +57,31 @@ def jogar():
     while continuar:
         print("Iniciando o jogo. \n")
 
-        marcacoes = resetar_marcacoes()
-        print(tabuleiro(marcacoes))
+        marcacoes: list = resetar_marcacoes()
 
-        entrada1_str: str = input("Jogador 1, escolha a posição a ser jogada no formato: 1, 1 (linha e coluna)\n")
-        entrada1_list: list = entrada1_str.split(", ")
+        for i in range(1, 10):
+            print(tabuleiro(marcacoes))
 
-        # realiza a validação do número digitado
-        while len(entrada1_list) == 1 or \
-                len(entrada1_list) > 2 or \
-                not (entrada1_list[0].isnumeric() and entrada1_list[1].isnumeric()) or \
-                len(entrada1_list) == 1 or \
-                len(entrada1_list) > 2 or \
-                int(entrada1_list[0]) < 1 or \
-                int(entrada1_list[0]) > 3 or \
-                int(entrada1_list[1]) < 1 or \
-                int(entrada1_list[1]) > 3:
-            entrada1_str = input("Escolha um formato válido de posição: 1, 1 (até 3)\n")
-            entrada1_list = entrada1_str.split(", ")
+            if i % 2 == 1:
+                jogador_rodada: int = 1
+                marcador: str = "X"
+            else:
+                jogador_rodada: int = 2
+                marcador: str = "O"
+
+            entrada_str: str = input(
+                f"Jogador {jogador_rodada}, escolha a posição a ser jogada no formato: 1, 1 (linha e coluna)\n")
+            entrada_list: list = entrada_str.split(", ")
+
+            # verifica o input feito, e se está vazio no tabuleiro
+            while validar_jogada(entrada_list) or marcacoes[int(entrada_list[0]) - 1][int(entrada_list[1]) - 1] != " ":
+                entrada_str: str = input("Escolha um formato válido de posição vazio: EX 1, 1 (até 3)\n")
+                entrada_list: list = entrada_str.split(", ")
+
+            linha: int = int(entrada_list[0]) - 1
+            coluna: int = int(entrada_list[1]) - 1
+
+            marcacoes[linha][coluna]: str = marcador
 
         input_continuar: str = input("Deseja continuar a jogar? (Digite 1 para sim): ")
         if input_continuar != "1":
