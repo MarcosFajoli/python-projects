@@ -40,6 +40,20 @@ def validar_jogada(entrada_list):
     return is_valid
 
 
+def verifica_ganhador(fl, tab):
+    # variavel verificando um possível ganhador
+    ganhou: bool = (tab[0][0] == fl and tab[0][1] == fl and tab[0][2] == fl) or \
+        (tab[1][0] == fl and tab[1][1] == fl and tab[1][2] == fl) or \
+        (tab[2][0] == fl and tab[2][1] == fl and tab[2][2] == fl) or \
+        (tab[0][0] == fl and tab[1][0] == fl and tab[2][0] == fl) or \
+        (tab[0][1] == fl and tab[1][1] == fl and tab[2][1] == fl) or \
+        (tab[0][2] == fl and tab[1][2] == fl and tab[2][2] == fl) or \
+        (tab[0][0] == fl and tab[1][1] == fl and tab[2][2] == fl) or \
+        (tab[0][2] == fl and tab[1][1] == fl and tab[2][0] == fl)
+
+    return ganhou
+
+
 def jogar():
     continuar: bool = True
     total_partidas: int = 3
@@ -56,6 +70,8 @@ def jogar():
 
     while continuar:
         print("Iniciando o jogo. \n")
+        pontos_jogador1: int = 0
+        pontos_jogador2: int = 0
 
         marcacoes: list = resetar_marcacoes()
 
@@ -82,6 +98,17 @@ def jogar():
             coluna: int = int(entrada_list[1]) - 1
 
             marcacoes[linha][coluna]: str = marcador
+
+            venceu_rodada: bool = verifica_ganhador(marcador, marcacoes)
+            if venceu_rodada:
+                print(tabuleiro(marcacoes))
+                if marcador == "X":
+                    print("Jogador 1 vence a rodada!")
+                    pontos_jogador1 += 1
+                else:
+                    print("Jogador 2 vence a rodada!")
+                    pontos_jogador2 += 1
+                break
 
         input_continuar: str = input("Deseja continuar a jogar? (Digite 1 para sim): ")
         if input_continuar != "1":
